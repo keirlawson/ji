@@ -57,7 +57,8 @@ pub fn search_issues(config: Config, query: &str) -> Result<Vec<Issue>> {
         .json::<IssueSearchResponseBody>()
         .context("Unable to decode JIRA response")?;
 
-    resp.issues.ok_or_else(|| anyhow!("No issues found for query"))
+    resp.issues
+        .ok_or_else(|| anyhow!("No issues found for query"))
 }
 
 pub fn select_issue(issues: &[Issue]) -> Result<&Issue> {
