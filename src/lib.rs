@@ -57,16 +57,16 @@ pub fn search_issues(config: Config, query: &str) -> Result<Vec<Issue>> {
         .json::<IssueSearchResponseBody>()
         .context("Unable to decode JIRA response")?;
 
-    resp.issues.ok_or(anyhow!("No issues found for query"))
+    resp.issues.ok_or_else(|| anyhow!("No issues found for query"))
 }
 
-pub fn select_issue(issues: &Vec<Issue>) -> Result<&Issue> {
+pub fn select_issue(issues: &[Issue]) -> Result<&Issue> {
     let selection = Select::with_theme(&ColorfulTheme::default())
         .items(&issues)
         .default(0)
         .interact_opt()?;
 
-    let index = selection.ok_or(anyhow!("No JIRA issue selected"))?;
+    let index = selection.ok_or_else(|| anyhow!("No JIRA issue selected"))?;
 
     Ok(&issues[index])
 }
