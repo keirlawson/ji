@@ -1,6 +1,7 @@
 # ji
 
 ![build](https://github.com/keirlawson/ji/workflows/build/badge.svg)
+[![Latest version](https://img.shields.io/crates/v/ji.svg)](https://crates.io/crates/ji)
 
 A simple command line tool allowing the user to retrieve the JIRA issue key for an issue they are currently working on.
 
