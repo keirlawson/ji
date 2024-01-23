@@ -35,11 +35,14 @@ impl fmt::Display for Issue {
     }
 }
 
-#[derive(Deserialize, Debug)]
 pub struct Config {
-    jira_host: Url,
-    jira_user: String,
-    jira_password: Option<String>,
+    pub host: Url,
+    pub credentials: Credentials,
+}
+
+pub enum Credentials {
+    PersonalAccessToken(String),
+    UsernamePassword { username: String, password: String },
 }
 
 pub fn search_issues(config: Config, query: &str) -> Result<Vec<Issue>> {
@@ -48,10 +51,18 @@ pub fn search_issues(config: Config, query: &str) -> Result<Vec<Issue>> {
         fields: vec![String::from("summary")],
     };
 
-    let resp = Client::new()
-        .post(config.jira_host.join("/rest/api/2/search").unwrap())
-        .json(&body)
-        .basic_auth(config.jira_user, config.jira_password)
+    let req = Client::new()
+        .post(config.host.join("/rest/api/2/search").unwrap())
+        .json(&body);
+
+    let req = match config.credentials {
+        Credentials::PersonalAccessToken(token) => req.bearer_auth(token),
+        Credentials::UsernamePassword { username, password } => {
+            req.basic_auth(username, Some(password))
+        }
+    };
+
+    let resp = req
         .send()
         .context("Unable to search JIRA for issues")?
         .json::<IssueSearchResponseBody>()
@@ -63,7 +74,7 @@ pub fn search_issues(config: Config, query: &str) -> Result<Vec<Issue>> {
 
 pub fn select_issue(issues: &[Issue]) -> Result<&Issue> {
     let selection = Select::with_theme(&ColorfulTheme::default())
-        .items(&issues)
+        .items(issues)
         .default(0)
         .interact_opt()?;
 
