@@ -1,6 +1,6 @@
 use anyhow::Result;
-use ji::Credentials;
-use std::env;
+use ji::{Credentials, Issue};
+use std::{collections::HashMap, env};
 use structopt::StructOpt;
 use url::Url;
 
@@ -10,6 +10,9 @@ struct Opt {
         default_value = "assignee IN (currentUser()) AND sprint IN openSprints() ORDER BY created DESC"
     )]
     query: String,
+    /// If specified adds a "no ticket" option which produces the specified shortcode
+    #[structopt(short, long)]
+    no_ticket: Option<String>,
 }
 
 fn read_config() -> Result<ji::Config> {
@@ -34,7 +37,16 @@ fn main() -> Result<()> {
 
     let config = read_config()?;
 
-    let issues = ji::search_issues(config, &opt.query)?;
+    let mut issues = ji::search_issues(config, &opt.query)?;
+
+    if let Some(no_ticket) = opt.no_ticket {
+        let mut fields = HashMap::new();
+        fields.insert("summary".to_owned(), "No ticket".to_owned());
+        issues.push(Issue {
+            key: no_ticket,
+            fields,
+        })
+    };
 
     let issue = ji::select_issue(&issues)?;
 
