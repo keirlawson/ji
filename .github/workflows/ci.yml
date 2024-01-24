@@ -4,7 +4,7 @@ name: build
 
 jobs:
   build:
-    name: Build
+    name: Build (Linux)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,12 +13,8 @@ jobs:
       - run: cargo fmt --all --check 
 
   build-mac:
-    name: Build
-    runs-on: ubuntu-latest
+    name: Build (MacOS) 
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install cross
-        run: cargo install cross --git https://github.com/cross-rs/cross
-      - name: Build
-        run: |
-          cross build --target aarch64-apple-darwin --verbose
+      - run: cargo build --verbose
