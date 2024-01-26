@@ -7,7 +7,7 @@ use url::Url;
 #[derive(StructOpt)]
 struct Opt {
     #[structopt(
-        default_value = "assignee IN (currentUser()) AND sprint IN openSprints() ORDER BY created DESC"
+        default_value = "assignee IN (currentUser()) AND sprint IN openSprints() AND statusCategory NOT IN (Done) ORDER BY created DESC"
     )]
     query: String,
     /// If specified adds a "no ticket" option which produces the specified shortcode
