@@ -59,8 +59,8 @@ jobs:
       uses: softprops/action-gh-release@v1    
       with:
           files: |
-            ji-linux
-            ji-mac
+            ./ji-linux
+            ./ji-mac
             ./**/*.deb
 
     
