@@ -35,7 +35,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: ji-linux
-        path: target/release/ji
+        path: ./ji-${{github.ref_name}}-X86_64-unknown-linux-gnu.xz 
 
   build-release-mac:
     runs-on: macos-14
@@ -45,10 +45,14 @@ jobs:
     - name: Package
       run: |
         cargo build --release --verbose
+    - name: Create binary archive
+      run: |
+        gzip -v target/release/ji
+        mv target/release/ji.gz ./ji-${{github.ref_name}}-aarch64-apple-darwin.gz 
     - uses: actions/upload-artifact@v4
       with:
         name: ji-mac
-        path: target/release/ji
+        path: ./ji-${{github.ref_name}}-aarch64-apple-darwin.gz 
           
   release:
     runs-on: ubuntu-latest
@@ -65,8 +69,8 @@ jobs:
       uses: softprops/action-gh-release@v1    
       with:
           files: |
-            ./ji-linux
-            ./ji-mac
-            ./**/*.deb
+            ./*.gz
+            ./*.xz
+            ./*.deb
 
     
