@@ -54,7 +54,7 @@ jobs:
     steps:
     - name: Download binaries
       uses: actions/download-artifact@v4
-    - run: ls
+    - run: "ls -lart"
     - name: Release
       uses: softprops/action-gh-release@v1    
       with:
