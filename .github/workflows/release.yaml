@@ -49,10 +49,13 @@ jobs:
     needs: [build-release-linux, build-release-mac]
 
     steps:
-    - name: Download debs
+    - name: Download binaries
       uses: actions/download-artifact@v4
+    - run: ls
     - name: Release
       uses: softprops/action-gh-release@v1    
       with:
-          files: ./**/*.deb
+          files: |
+            ./**/*.deb
+
     
