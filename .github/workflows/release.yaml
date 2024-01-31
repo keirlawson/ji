@@ -64,7 +64,6 @@ jobs:
       uses: actions/download-artifact@v4
       with:
           merge-multiple: true
-    - run: "ls -lart"
     - name: Release
       uses: softprops/action-gh-release@v1    
       with:
