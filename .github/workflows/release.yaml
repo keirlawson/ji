@@ -21,7 +21,7 @@ jobs:
       run: |
         cargo deb --verbose
         echo "DEB_NAME=$(basename $(ls target/debian/*.deb))" >> "$GITHUB_ENV"
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: ${{ env.DEB_NAME }}
         path: target/debian/${{ env.DEB_NAME }}
