@@ -25,7 +25,7 @@ jobs:
       with:
         name: ${{ env.DEB_NAME }}
         path: target/debian/${{ env.DEB_NAME }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: ji-linux
         path: target/release/ji
@@ -38,7 +38,7 @@ jobs:
     - name: Package
       run: |
         cargo build --release --verbose
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: ji-mac
         path: target/release/ji
@@ -50,7 +50,7 @@ jobs:
 
     steps:
     - name: Download debs
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
     - name: Release
       uses: softprops/action-gh-release@v1    
       with:
