@@ -24,6 +24,20 @@ pub struct Issue {
     pub fields: HashMap<String, String>,
 }
 
+impl fuzzy_select::Select for Issue {
+    fn search_content(&self) -> &str {
+        self.fields.get("summary").unwrap()
+    }
+
+    fn render_before_content(&self) -> Option<impl fmt::Display + '_> {
+        None::<Self>
+    }
+
+    fn render_after_content(&self) -> Option<impl fmt::Display + '_> {
+        None::<Self>
+    }
+}
+
 impl fmt::Display for Issue {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
