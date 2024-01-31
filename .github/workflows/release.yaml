@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-release-linux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install cargo-deb
+      run: cargo install cargo-deb
+    - name: Package
+      run: |
+        cargo deb --verbose
+        echo "DEB_NAME=$(basename $(ls target/debian/*.deb))" >> "$GITHUB_ENV"
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.DEB_NAME }}
+        path: target/debian/${{ env.DEB_NAME }}
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ji-linux
+        path: target/release/ji
+
+  build-release-mac:
+    runs-on: macos-14
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Package
+      run: |
+        cargo build --release --verbose
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ji-mac
+        path: target/release/ji
+          
+  release:
+    runs-on: ubuntu-latest
+
+    needs: [build-release-linux, build-release-mac]
+
+    steps:
+    - name: Download debs
+      uses: actions/download-artifact@v3
+    - name: Release
+      uses: softprops/action-gh-release@v1    
+      with:
+          files: ./**/*.deb
+    
