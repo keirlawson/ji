@@ -15,7 +15,7 @@ anyhow = "1.0"
 url = { version = "2", features = ["serde"] }
 structopt = "0.3"
 env_logger = "0.11"
-fuzzy-select = "0.1.1"
+fuzzy-select = { git = "https://github.com/knutwalker/fuzzy-select.git", rev = "7f785a728a584a6f154fe2ff910b28cf02b7df4c" }
 
 [profile.release]
 # per https://kobzol.github.io/rust/cargo/2024/01/23/making-rust-binaries-smaller-by-default.html

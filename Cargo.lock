@@ -426,8 +426,7 @@ dependencies = [
 [[package]]
 name = "fuzzy-select"
 version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6eef45657cbb26c7d16a064714abce889e9ea1de6874963756ed110a9324e4f7"
+source = "git+https://github.com/knutwalker/fuzzy-select.git?rev=7f785a728a584a6f154fe2ff910b28cf02b7df4c#7f785a728a584a6f154fe2ff910b28cf02b7df4c"
 dependencies = [
  "crossterm",
  "nucleo",
