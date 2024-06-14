@@ -47,10 +47,11 @@ fn main() -> Result<()> {
             fields,
         })
     };
+    use fuzzy_select::FuzzySelect;
 
-    let issue = ji::select_issue(&issues)?;
+    let selected = FuzzySelect::new().with_options(issues).select()?;
 
-    println!("{}", issue.key);
+    println!("{}", selected.key);
 
     Ok(())
 }

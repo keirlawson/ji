@@ -1,5 +1,4 @@
 use anyhow::{anyhow, Context, Result};
-use dialoguer::{theme::ColorfulTheme, Select};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt;
@@ -22,6 +21,20 @@ struct IssueSearchResponseBody {
 pub struct Issue {
     pub key: String,
     pub fields: HashMap<String, String>,
+}
+
+impl fuzzy_select::Select for Issue {
+    fn search_content(&self) -> &str {
+        self.fields.get("summary").unwrap()
+    }
+
+    fn render_before_content(&self) -> Option<impl fmt::Display + '_> {
+        None::<Self>
+    }
+
+    fn render_after_content(&self) -> Option<impl fmt::Display + '_> {
+        None::<Self>
+    }
 }
 
 impl fmt::Display for Issue {
@@ -70,15 +83,4 @@ pub fn search_issues(config: Config, query: &str) -> Result<Vec<Issue>> {
 
     resp.issues
         .ok_or_else(|| anyhow!("No issues found for query"))
-}
-
-pub fn select_issue(issues: &[Issue]) -> Result<&Issue> {
-    let selection = Select::with_theme(&ColorfulTheme::default())
-        .items(issues)
-        .default(0)
-        .interact_opt()?;
-
-    let index = selection.ok_or_else(|| anyhow!("No JIRA issue selected"))?;
-
-    Ok(&issues[index])
 }
