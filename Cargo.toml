@@ -1,6 +1,6 @@
 [package]
 name = "ji"
-version = "1.1.11"
+version = "1.2.0"
 authors = ["Keir Lawson <keirlawson@gmail.com>"]
 description = "Simple CLI for getting the key for a selected JIRA issue"
 license = "MIT OR Apache-2.0"
