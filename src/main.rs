@@ -1,4 +1,5 @@
 use anyhow::Result;
+use fuzzy_select::FuzzySelect;
 use ji::{Credentials, Issue};
 use std::{collections::HashMap, env};
 use structopt::StructOpt;
@@ -13,6 +14,8 @@ struct Opt {
     /// If specified adds a "no ticket" option which produces the specified shortcode
     #[structopt(short, long)]
     no_ticket: Option<String>,
+    #[structopt(long)]
+    fuzzy: bool,
 }
 
 fn read_config() -> Result<ji::Config> {
@@ -47,11 +50,14 @@ fn main() -> Result<()> {
             fields,
         })
     };
-    use fuzzy_select::FuzzySelect;
 
-    let selected = FuzzySelect::new().with_options(issues).select()?;
+    let selected = if opt.fuzzy {
+        FuzzySelect::new().with_options(issues).select()?.key
+    } else {
+        ji::select_issue(&issues)?.key.clone()
+    };
 
-    println!("{}", selected.key);
+    println!("{}", selected);
 
     Ok(())
 }
