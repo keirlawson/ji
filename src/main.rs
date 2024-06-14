@@ -49,10 +49,7 @@ fn main() -> Result<()> {
     };
     use fuzzy_select::FuzzySelect;
 
-    let selected = FuzzySelect::new()
-        .with_prompt("Select something")
-        .with_options(issues)
-        .select()?;
+    let selected = FuzzySelect::new().with_options(issues).select()?;
 
     println!("{}", selected.key);
 
